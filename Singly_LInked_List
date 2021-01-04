@@ -106,17 +106,17 @@ void print(){
 }
 
 int main(){
-    head=NULL;
-    insert(2,1);						//inserting at nth position
-    insert(3,2);						//inserting at nth position
-    insert(4,3);						//inserting at nth position
-    insert(5,4);						//inserting at nth position
-    insert(10,1);						//inserting at nth position
-    print();							//print
-	insert_node_at_beginning(100);		//inserting at beginning
-	insert_node_at_end(13);				//inserting at end
-	del_pos(3);							//deleting node at nth position
-    print();							//print
-	reverse_linked_list();				//reversing singly linked list
-	print();							//print
+        head=NULL;
+        insert(2,1);						//inserting at nth position
+        insert(3,2);						//inserting at nth position
+        insert(4,3);						//inserting at nth position
+        insert(5,4);						//inserting at nth position
+        insert(10,1);						//inserting at nth position
+        print();						//print
+	insert_node_at_beginning(100);				//inserting at beginning
+	insert_node_at_end(13);					//inserting at end
+	del_pos(3);						//deleting node at nth position
+        print();						//print
+	reverse_linked_list();					//reversing singly linked list
+	print();						//print
 }
