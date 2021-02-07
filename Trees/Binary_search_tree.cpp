@@ -1,5 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include<bits/stdc++.h>
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+using namespace std;
 
 struct Bstnode{
     int data;
@@ -7,6 +8,7 @@ struct Bstnode{
     struct Bstnode* right;
 };
 
+//Creating a new node
 struct Bstnode* newnode(int data){
     struct Bstnode* new_node=(struct Bstnode*)malloc(sizeof(struct Bstnode));
     new_node->data=data;
@@ -15,6 +17,7 @@ struct Bstnode* newnode(int data){
     return new_node;
 }
 
+//Inserting node to BST
 struct Bstnode* insert(struct Bstnode* root,int data){
     if(root==NULL){
         root=newnode(data);
@@ -28,6 +31,7 @@ struct Bstnode* insert(struct Bstnode* root,int data){
     return root;
 }
 
+//Searching for an element in BST
 int search(struct Bstnode* node,int data){
     if(node==NULL){
         return 0;
@@ -41,8 +45,10 @@ int search(struct Bstnode* node,int data){
     else{
         search(node->right,data);
     }
+    return 0;
 }
 
+//Finding minimum element in BST
 int Findmin(struct Bstnode* root){
     if(root==NULL){
         return -1;
@@ -53,6 +59,7 @@ int Findmin(struct Bstnode* root){
     return root->data;
 }
 
+//Finding maximum element in BST
 int Findmax(struct Bstnode* root){
     if(root==NULL){
         return -1;
@@ -63,6 +70,15 @@ int Findmax(struct Bstnode* root){
     return root->data;
 }
 
+//Finding height of BST
+int height(struct Bstnode* root){
+    if(root==NULL){
+        return -1;
+    }
+    return max(height(root->left),height(root->right))+1;
+}
+
+//Inorder traversal of BST (Prints in sorted order)
 void inorder(struct Bstnode* node){
     if(node==NULL) return;
     inorder(node->left);
@@ -70,12 +86,42 @@ void inorder(struct Bstnode* node){
     inorder(node->right);
 }
 
+//Preorder traversal of BST 
+void preorder(struct Bstnode* root){
+    if(root==NULL) return;
+    printf("%d ",root->data);
+    preorder(root->left);
+    preorder(root->right);
+}
+
+//Postorder traversal of BST
+void postorder(struct Bstnode* root){
+    if(root==NULL) return;
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ",root->data);
+}
+
+//Level-order traversal of BST (Breadth-first strategy)
+void levelorder(struct Bstnode* root){
+    if(root==NULL) return;
+    queue<Bstnode*> q;
+    q.push(root);
+    while(!q.empty()){
+        Bstnode* current=q.front();
+        printf("%d ",current->data);
+        if(current->left!=NULL) q.push(current->left);
+        if(current->right!=NULL) q.push(current->right);
+        q.pop();
+    }
+}
+
 int main(){
     struct Bstnode* root=NULL;
     int k=1;
     while(k){
         int ch,n,min_element,max_element;
-        printf("\n1:Insertion\t 2:Search\t3:Find minimum element in BST\t4:Find maximum element in BST\t5:exit\n");
+        printf("1:Insertion\n2:Search\n3:Find minimum element in BST\n4:Find maximum element in BST\n5:Height of BST\n6:exit\n");
         scanf("%d",&ch);
         switch(ch){
             case 1:
@@ -107,10 +153,20 @@ int main(){
                 printf("Max Element is %d\n",max_element);
                 break;
             case 5:
+                printf("Height of BST is %d\n",height(root));
+                break;
+            case 6:
                 k=0;
                 break;
         }
+        printf("------------------------------------------------\n");
     }
-    printf("\nInorder traversal of BST: ");
+    printf("\npreorder traversal of BST     :");
+    preorder(root);
+    printf("\nInorder traversal of BST      :");
     inorder(root);
+    printf("\npostorder traversal of BST    :");
+    postorder(root);
+    printf("\nLevel order traversal of BST  :");
+    levelorder(root);
 }
