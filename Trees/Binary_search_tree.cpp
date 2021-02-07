@@ -43,6 +43,26 @@ int search(struct Bstnode* node,int data){
     }
 }
 
+int Findmin(struct Bstnode* root){
+    if(root==NULL){
+        return -1;
+    }
+    while(root->left!=NULL){
+        root=root->left;
+    }
+    return root->data;
+}
+
+int Findmax(struct Bstnode* root){
+    if(root==NULL){
+        return -1;
+    }
+    while(root->right!=NULL){
+        root=root->right;
+    }
+    return root->data;
+}
+
 void inorder(struct Bstnode* node){
     if(node==NULL) return;
     inorder(node->left);
@@ -54,12 +74,11 @@ int main(){
     struct Bstnode* root=NULL;
     int k=1;
     while(k){
-        int ch,n;
-        printf("\n1:Insertion\t 2:Search\t3:exit\n");
+        int ch,n,min_element,max_element;
+        printf("\n1:Insertion\t 2:Search\t3:Find minimum element in BST\t4:Find maximum element in BST\t5:exit\n");
         scanf("%d",&ch);
         switch(ch){
             case 1:
-                n;
                 printf("Enter element :");
                 scanf("%d",&n);
                 if(root==NULL){
@@ -70,7 +89,6 @@ int main(){
                 }
                 break;
             case 2:
-                n;
                 printf("Enter the element to be searched :");
                 scanf("%d",&n);
                 if(search(root,n)){
@@ -81,6 +99,14 @@ int main(){
                 }
                 break;
             case 3:
+                min_element=Findmin(root);
+                printf("Min Element is %d\n",min_element);
+                break;
+            case 4:
+                max_element=Findmax(root);
+                printf("Max Element is %d\n",max_element);
+                break;
+            case 5:
                 k=0;
                 break;
         }
