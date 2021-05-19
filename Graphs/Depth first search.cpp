@@ -17,15 +17,15 @@ void DFS(int vertex){
 }
 
 int main(){
-	addEdge(0,1);
+    addEdge(0,1);
     addEdge(0, 9);
     addEdge(1, 2);
-	addEdge(1,5);
+    addEdge(1,5);
     addEdge(2, 0);
-	addEdge(2,6);
+    addEdge(2,6);
     addEdge(2, 3);
-	addEdge(3,10);
+    addEdge(3,10);
     addEdge(9, 3);
-	cout<<"DFS : ";
-	DFS(1);
+    cout<<"DFS : ";
+    DFS(1);
 }
