@@ -8,6 +8,7 @@ void addEdge(int from,int to){
     graph[from].push_back(to);
 }
 
+
 void BFS(int vertex){
     visited[vertex] = true;
     queue<int> queue;
@@ -25,6 +26,7 @@ void BFS(int vertex){
         }    
     }
 }
+
 
 int main(){
     addEdge(0, 1);
