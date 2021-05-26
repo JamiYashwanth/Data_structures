@@ -22,7 +22,7 @@ void prims(vector<vector<int>> graph, vector<int>& value, vector<bool>& visited,
         visited[u]=true;                                         // Assigning index as visited
         for(int j = 0; j < n; j++){
             if(visited[j]==false and graph[u][j]!=0){
-                if(graph[u][j]<value[u]){
+                if(graph[u][j]<value[j]){
                     parent[j]=u;
                     value[j]=graph[u][j];
                 }
