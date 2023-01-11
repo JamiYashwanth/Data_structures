@@ -119,6 +119,7 @@ bool unlock(Tree* node,ll id){
     2. Lock the node
 */
 bool upgrade(Tree* node,ll id){
+    if(node->is_locked || node->desc_locked==0) return false;
     if(!check_ancestors(node)) return false; 
     
     vector<Tree*> locked_nodes;
