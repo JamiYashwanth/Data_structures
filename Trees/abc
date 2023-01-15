@@ -1,0 +1,260 @@
+Hi 
+@Jami Yashwanth
+
+
+Jami Yashwanth
+  11:02 AM
+Hi 
+@Saurav Suman
+, Good morning!!
+
+
+Saurav Suman
+  11:03 AM
+Can you explain your part A solution ? Please mention the time complexity as well.
+
+
+Jami Yashwanth
+  11:03 AM
+Sure sir
+
+
+Saurav Suman
+  11:05 AM
+Mention in the chat .
+
+
+Jami Yashwanth
+  11:05 AM
+Okay sir
+
+
+Saurav Suman
+  11:06 AM
+Briefly explain the lock, unlock, and upgrade functions.
+
+
+Jami Yashwanth
+  11:11 AM
+The main aim of the question is to lock and the unlock the nodes of a tree .
+There were three operations
+Lock the node - What I have done is , first condition is to check whether the node is already locked or not . If locked I'm returning false , else I'm checking ancestor nodes as well as the descendant nodes whether any of them were locked or not . If there were no nodes locked , Then I'm locking that particular node and informing the ancestors that one of its descendants were locked . The main aim of informing the ancestors is to reduce the time complexity in futher queries .
+Unlock the node - Unlocking the node is done when the node is already locked . If it was not locked earlier I'm returning false . If it was locked , then I'm checking the id of that node and if it's matches , unlocking the node and returns true.
+Upgrade the node - Firstly I'm checking whether the node is already locked or not , if not locked I'm returning false . Else I
+
+
+Jami Yashwanth
+  11:18 AM
+3.Upgrade the node - Firstly I'm checking whether the node is already locked or not , if not locked I'm returning false . Else I'm checking the ancestors . If any of the ancestors were locked I'm returning false . Now the case with the descendants were checked . If the descendants were locked and matches with the particular Id . I'm storing that nodes and if any of them do not match with that id , then returning false . If all nodes were matched with the Id. I'm unlocking the nodes which were stored earlier and then locking this particular node .
+Time complexity of my code -
+Checking for ancestors - O(h)
+Checking for the descendants - O(n)
+Locking the node - O(n)
+Unlocking - O(h)
+Upgrading - O(n)
+11:19
+Overall worst time complexity is - O(q*n)
+where q is number of queries and n is no. of nodes
+
+
+Saurav Suman
+  1:20 PM
+Can you try to optimise it ?
+
+
+Shweta Tyagi
+  1:25 PM
+@here we can resume this session post lunch in 30 mins
+:+1:
+1
+
+
+
+Jami Yashwanth
+  1:33 PM
+Instead of checking for whether the ancestors were locked or not everytime we lock the node . I can keep a variable called ancestor_locked . And can update this variable when I lock a node .
+But this won't give a better optimization.. can you please give any hint
+1:34
+In the previous message , i wrongly mentioned that O(n) for locking the node . My code time complexity for locking is O(h)
+Where h is height of the tree
+
+
+Saurav Suman
+  2:38 PM
+Can you try to optimise your upgrade function ?
+2:38
+Also , can you derive complexity of your lock function ?
+
+
+Jami Yashwanth
+  2:50 PM
+In my lock function
+I'm checking for locked ancestor nodes , for checking ancestors I'm traversing through parent nodes .
+bool check_ancestors(Tree* node){
+    Tree* k = node->parent;
+    while(k!=NULL){
+        if(k->is_locked) return false;
+        k=k->parent; // Traversing through parent nodes
+    }
+    return true;
+}
+For traversing through parent nodes , it is basically takes h time (the level of that node) . Worst case is if we are traversing from leaf node . The time complexity will be O(h) which is logn
+After locking the node , again traversing through parent nodes and incrementing desc_locked variable . The time complexity for this also is O(h)
+Total time complexity for locking node is : O(logn)+O(logn) = 2O(logn) where 2 can be neglected , Hence time complexity is O(logn) for locking the node
+
+
+Jami Yashwanth
+  3:02 PM
+For the upgrade function ,
+Instead of checking for ancestors nodes whether they were locked or not every time . In the lock functionality , I can inform all its descendants that one of its ancestors were locked by keeping a variable called ances_locked .
+In the upgrade functionality , if the ances_locked!=0 . I will return false instead of calling check_ancestors function
+
+
+Saurav Suman
+  4:50 PM
+What is the complexity of your upgrade function ?
+
+
+Jami Yashwanth
+  4:51 PM
+O(n) sir
+4:51
+Because of traversing through every descendant
+
+
+Saurav Suman
+  5:20 PM
+Okay
+5:24
+Let’s proceed with the part B of this hackathon
+
+
+Jami Yashwanth
+  5:24 PM
+Okay sir
+
+
+Saurav Suman
+  5:25 PM
+Let’s say you are running the lock/unlock in a multi core machine. Now you
+want to let multiple threads to run lock() As we saw in part A, locking a
+node has multiple validations inside. Will doing lock on two nodes
+cause a race condition. If yes, how will you solve it. In short, how do
+make the lock() function thread safe? - Multiple threads running it
+simultaneously shouldn’t not affect the correctness. - Try to make the
+critical sections more granular. ie. don’t create any big
+atomic/synchronised blocks that will make parallelism suffer. Consider
+each operation is atomic.
+
+
+Jami Yashwanth
+  5:33 PM
+As multiple validations were evaluated, it causes race condition.
+I'll take a lock variable and initialise it to zero initially , when a lock functionality is called . If the lock variable is zero it can enter in to the critical section and after entering I'll make a lock variable as one . And other threads cannot go into critical section because the lock variable is one .
+This lock variable can avoid the race conditions and only one thread can go into critical section at one particular time .
+5:34
+Once it has processed completely till end of critical section , I'll again make lock variable as zero
+
+
+Jami Yashwanth
+  5:43 PM
+int lockVariable = 0;
+
+bool lock(Tree* node, ll id){
+    // start of critical section
+    while(lockVariable != 0); // No other thread can enter until the lockVariable = 0
+    
+    lockVariable=1; 
+    
+    if(node->is_locked || node->desc_locked>0) return false;
+
+    if(!check_ancestors(node)) return false;
+
+    Tree* k = node->parent;
+
+    while(k!=NULL){
+        k->desc_locked+=1;
+        k=k->parent;
+    }
+
+    node->is_locked = true;
+    node->uid = id;
+    
+    lockVariable = 0;
+    // end of critical section
+
+    return true;
+}
+
+
+Saurav Suman
+  5:53 PM
+Can you first try to identify all the conflicts ?
+
+
+Jami Yashwanth
+  5:59 PM
+In my code , desc_locked variable is one of the shared resource .
+If there were two threads accessing this shared resource at the same time , it leads to a race condition . Without successfully updating the desc_locked variable , other thread can get this resource and perform it's own execution . Due to this conflict , lockedVariable was introduced to avoid race condition .
+6:01
+is_locked variable is also an other shared resource in my code .
+6:04
+Suppose let's say thread one enters first , it is in middle of the execution of lock function and it doesn't updated the is_locked variable . In such case , other thread also exectues lock function and there will be a case that , thread 1 node is still unlock .
+These were the conflicts of my code which doesn't satisfy multi threading without lockedVariable
+
+
+Saurav Suman
+  6:15 PM
+Can you identify any more conflicts that can happen ?
+
+
+Jami Yashwanth
+  6:20 PM
+Yes sir , I forgot to mention about id of the node . uid is also a shared variable that can cause race condition
+
+
+Saurav Suman
+  8:27 PM
+Can you think of any more ?
+
+
+Jami Yashwanth
+  8:31 PM
+Sir , Multiple threads accessing the lockVariable at the same time causes any conflict ?
+
+
+Jami Yashwanth
+  8:43 PM
+@Saurav Suman
+ sir, Are you asking about the conflicts for before achieving the multithreading code(i.e, lockVariable was not introduced code) or after achieving the lockVariable code ?? (edited) 
+8:44
+If the case is with the code after lockVariable was introduced ,
+Conflicts raise when multiple threads perform different functionality , ie . One thread is performing lock functionality and the other thread is performing unlock or upgrade functionality
+
+
+Jami Yashwanth
+  10:18 PM
+Hi @here ,kindly would like to know whether this round process ended for today ?? Or will be continued on the other day ?? (edited) 
+
+
+Saurav Suman
+  10:49 PM
+Hey 
+@Jami Yashwanth
+ , Hr will get back to you with the feedback .
+
+
+Jami Yashwanth
+  10:50 PM
+Oh , thank you 
+@Saurav Suman
+ sir
+
+
+
+
+
+
+
+
+
